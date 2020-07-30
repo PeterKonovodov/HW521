@@ -10,27 +10,20 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String FILE_NAME = "users.txt";
 
-    private Button loginButton;
-    private Button registerButton;
     private EditText editTextLogin;
     private EditText editTextPassword;
-//    private String userName;
-//    private String password;
 
 
     private HashMap<String, User> users = new HashMap<>();
@@ -47,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void InitViews() {
-        loginButton = findViewById(R.id.loginButton);
-        registerButton = findViewById(R.id.registerButton);
+        Button loginButton = findViewById(R.id.loginButton);
+        Button registerButton = findViewById(R.id.registerButton);
         editTextLogin = findViewById(R.id.editTextLogin);
         editTextPassword = findViewById(R.id.editTextPassword);
 
@@ -123,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, getString(R.string.user_is_logined_already), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!password.equals(users.get(userName).getPassword())) {
+        if (!password.equals(Objects.requireNonNull(users.get(userName)).getPassword())) {
             Toast.makeText(MainActivity.this, getString(R.string.password_is_wrong), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -136,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             reader = new BufferedReader(new InputStreamReader(openFileInput(FILE_NAME)));
             try {
-                String readString = null;
+                String readString;
                 while ((readString = reader.readLine()) != null) {
                     String[] parts = readString.split(";");
                     users.put(parts[0], new User(parts[0], parts[1]));
